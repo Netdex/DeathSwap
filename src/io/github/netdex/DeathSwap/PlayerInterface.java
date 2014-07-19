@@ -7,8 +7,6 @@ import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
 import org.bukkit.entity.Player;
 
-import Bammerbom.PreGenerator.Cuboid;
-
 public class PlayerInterface {
 	
 	public static void help(Player player) {
@@ -19,7 +17,7 @@ public class PlayerInterface {
 		player.sendMessage(ChatColor.GOLD + "==================ADMIN COMMANDS=================");
 		player.sendMessage(ChatColor.GOLD + "/dsa start : Starts the game (OP)");
 		player.sendMessage(ChatColor.GOLD + "/dsa stop : Stops the game (OP)");
-		player.sendMessage(ChatColor.GOLD + "v2.7 Created by Netdex");
+		player.sendMessage(ChatColor.GOLD + "v2.8 Created by Netdex");
 		
 	}
 	
@@ -59,10 +57,6 @@ public class PlayerInterface {
 		if(DeathSwap.world == null){ // If world does not exist, make one
 			DeathSwap.world = new WorldCreator("deathswap").environment(World.Environment.NORMAL) // Parameters
 					.generateStructures(true).type(WorldType.NORMAL).createWorld();
-			Cuboid region = new Cuboid(DeathSwap.plugin, DeathSwap.world, 0, 3, 0, 10000, 3, 10000);
-			Bukkit.getLogger().info("Starting pregeneration of DeathSwap...");
-			region.generateChunks();
-			Bukkit.getLogger().info("Generation complete!");
 		}
 	}
 }
