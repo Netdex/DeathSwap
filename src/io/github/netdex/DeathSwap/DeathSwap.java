@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class DeathSwap extends JavaPlugin implements Listener {
@@ -19,8 +20,10 @@ public class DeathSwap extends JavaPlugin implements Listener {
 	public static Thread t;
 	public static PlayerSwapper ps = new PlayerSwapper();
 	public static String defaultWorld = "world";
+	public static Plugin plugin;
 	
 	public void onEnable() {
+		this.plugin = this;
 		getServer().getPluginManager().registerEvents(this, this); // Register listeners
 		PlayerInterface.loadWorld(); // Load world
 		this.getCommand("ds").setExecutor(new CommandManager(this));
@@ -52,7 +55,7 @@ public class DeathSwap extends JavaPlugin implements Listener {
 	@EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         String name = event.getPlayer().getName();
-        if(playerQueue.contains(name)){
+        if(playerQueue.contains(name) && gameRunning){
         	playerQueue.remove(name);
         	PlayerInterface.playerBroadcast(name + " has left DeathSwap.");
         }
