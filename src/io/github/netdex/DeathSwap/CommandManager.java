@@ -64,6 +64,7 @@ public class CommandManager implements CommandExecutor {
 					DeathSwap.playerQueue.remove(player.getName());
 					PlayerInterface.playerBroadcast(player.getName() + " has left DeathSwap.");
 					PlayerInterface.sendMessage(player, "You have left the game.");
+					player.teleport(Bukkit.getWorld(DeathSwap.defaultWorld).getSpawnLocation());
 					PlayerInterface.checkWinner();
 					return true;
 				}
