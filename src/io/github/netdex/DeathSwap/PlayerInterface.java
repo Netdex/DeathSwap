@@ -15,9 +15,9 @@ public class PlayerInterface {
 		player.sendMessage(ChatColor.GOLD + "/ds leave : Leaves the DeathSwap queue, or leaves during the game");
 		player.sendMessage(ChatColor.GOLD + "/ds list : Lists all players in the DeathSwap queue");
 		player.sendMessage(ChatColor.GOLD + "==================ADMIN COMMANDS=================");
-		player.sendMessage(ChatColor.GOLD + "/dsa start : Starts the game (OP)");
-		player.sendMessage(ChatColor.GOLD + "/dsa stop : Stops the game (OP)");
-		player.sendMessage(ChatColor.GOLD + "v2.8 Created by Netdex");
+		player.sendMessage(ChatColor.GOLD + "/dsa start : Starts the game [OP]");
+		player.sendMessage(ChatColor.GOLD + "/dsa stop : Stops the game [OP]");
+		player.sendMessage(ChatColor.GOLD + "v2.9 Created by Netdex");
 		
 	}
 	

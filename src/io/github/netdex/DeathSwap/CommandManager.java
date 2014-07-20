@@ -127,7 +127,8 @@ public class CommandManager implements CommandExecutor {
 					
 					p.teleport(new Location(Bukkit.getWorld("deathswap"), x, 128, z));
 					p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 600, 7)); // Resistance
-					PlayerInterface.sendMessage(p, "You have a 15 second grace period. Enjoy falling.");
+					PlayerInterface.sendMessage(p, "You have a 30 second invulnerability period. Enjoy falling.");
+					PlayerInterface.sendMessage(p, "You will have 3 minutes to prepare before swapping begins.");
 					
 					// Reset stats
 					p.setHealth(20);
@@ -155,6 +156,7 @@ public class CommandManager implements CommandExecutor {
 				DeathSwap.ps.kill();
 				return true;
 			}
+
 			return false;
 		}
 		return false;
