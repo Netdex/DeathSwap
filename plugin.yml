@@ -1,6 +1,6 @@
 name: DeathSwap
 main: io.github.netdex.DeathSwap.DeathSwap
-version: 3.2
+version: 3.3
 
 commands:
   ds:

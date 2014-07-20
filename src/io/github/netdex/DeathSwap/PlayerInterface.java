@@ -17,7 +17,7 @@ public class PlayerInterface {
 		player.sendMessage(ChatColor.GOLD + "==================ADMIN COMMANDS=================");
 		player.sendMessage(ChatColor.GOLD + "/dsa start : Starts the game [OP]");
 		player.sendMessage(ChatColor.GOLD + "/dsa stop : Stops the game [OP]");
-		player.sendMessage(ChatColor.GOLD + "v3.2 Created by Netdex");
+		player.sendMessage(ChatColor.GOLD + "v3.3 Created by Netdex");
 		
 	}
 	
@@ -57,6 +57,24 @@ public class PlayerInterface {
 		if(DeathSwap.world == null){ // If world does not exist, make one
 			DeathSwap.world = new WorldCreator("deathswap").environment(World.Environment.NORMAL) // Parameters
 					.generateStructures(true).type(WorldType.NORMAL).createWorld();
+		}
+	}
+	
+	public static void setConfig(){
+		if(!DeathSwap.config.contains("invincibleTicks")){
+			DeathSwap.config.set("invincibleTicks", 600);
+		}
+		if(!DeathSwap.config.contains("graceTime")){
+			DeathSwap.config.set("graceTime", 120);
+		}
+		if(!DeathSwap.config.contains("swapMinTime")){
+			DeathSwap.config.set("swapMinTime", 60);
+		}
+		if(!DeathSwap.config.contains("swapMaxTime")){
+			DeathSwap.config.set("swapMaxTime", 120);
+		}
+		if(!DeathSwap.config.contains("maxPlayers")){
+			DeathSwap.config.set("maxPlayers", 4);
 		}
 	}
 }

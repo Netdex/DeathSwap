@@ -18,11 +18,13 @@ import org.bukkit.potion.PotionEffectType;
 
 public class CommandManager implements CommandExecutor {
 	private final DeathSwap plugin;
- 
+	private int invincibility = DeathSwap.config.getInt("invincibleTicks");
+	private int maxPlayers = DeathSwap.config.getInt("maxPlayers");
+	
 	public CommandManager(DeathSwap plugin) {
 		this.plugin = plugin;
 	}
- 
+	
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		// Normal player command
@@ -46,12 +48,12 @@ public class CommandManager implements CommandExecutor {
 					PlayerInterface.sendMessage(player, "You are already in the queue.");
 					return true;
 				}
-				if(DeathSwap.playerQueue.size() == 4){ // Check if queue full
+				if(DeathSwap.playerQueue.size() == maxPlayers){ // Check if queue full
 					PlayerInterface.sendMessage(player, "The DeathSwap lobby is currently full.");
 					return true;
 				}
 				DeathSwap.playerQueue.add(player.getName()); // Normal action
-				PlayerInterface.sendMessage(player, "You are " + DeathSwap.playerQueue.size() + "/4 in the queue.");
+				PlayerInterface.sendMessage(player, "You are " + DeathSwap.playerQueue.size() + "/" + maxPlayers + " in the queue.");
 				return true;
 			}
 			
@@ -79,7 +81,7 @@ public class CommandManager implements CommandExecutor {
 			}
 			
 			if(args[0].equalsIgnoreCase("list")){ // List players
-				PlayerInterface.sendMessage(player, "Player List : " + DeathSwap.playerQueue.size() + "/4");
+				PlayerInterface.sendMessage(player, "Player List : " + DeathSwap.playerQueue.size() + "/" + maxPlayers);
 				Player[] players = Bukkit.getServer().getOnlinePlayers();
 				if(DeathSwap.playerQueue.size() == 0){
 					player.sendMessage(ChatColor.GOLD + "There are no players in queue.");
@@ -126,14 +128,16 @@ public class CommandManager implements CommandExecutor {
 					int x = r.nextInt(10000);
 					int z = r.nextInt(10000);
 					
+					// Avoid these biomes
 					while(Bukkit.getWorld("deathswap").getBiome(x, z) == Biome.OCEAN || Bukkit.getWorld("deathswap").getBiome(x, z) == Biome.DEEP_OCEAN){
 						x = r.nextInt(10000);
 						z = r.nextInt(10000);
 					}
 					
 					p.teleport(new Location(Bukkit.getWorld("deathswap"), x, 128, z));
-					p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 600, 7)); // Resistance
-					PlayerInterface.sendMessage(p, "You have a 30 second invulnerability period. Enjoy falling.");
+					
+					p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, invincibility, 7)); // Resistance
+					PlayerInterface.sendMessage(p, "You have a " + (invincibility/20) + " second invulnerability period. Enjoy falling.");
 					
 					// Reset stats
 					p.setHealth(20);

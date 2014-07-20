@@ -8,16 +8,19 @@ import org.bukkit.entity.Player;
 
 public class PlayerSwapper extends Thread {
 	public static volatile boolean isRunning = true;
+	private static int graceTime = DeathSwap.config.getInt("graceTime");
+	private static int minSwap = DeathSwap.config.getInt("minSwapTime");
+	private static int maxSwap = DeathSwap.config.getInt("maxSwapTime");
 	
 	public void run(){
 		Random r = new Random();
-		try {Thread.sleep(120000);} catch (InterruptedException e1) {}
+		try {Thread.sleep(graceTime * 1000);} catch (InterruptedException e1) {}
 		while(isRunning){
 			PlayerInterface.playerBroadcast("Swap!");
 			
 			swap();
 			
-			long sleep = (r.nextInt(60) + 60) * 1000;
+			long sleep = (r.nextInt(maxSwap - minSwap) + minSwap) * 1000;
 			try {Thread.sleep(sleep);} catch (InterruptedException e) {}
 		}
 	}

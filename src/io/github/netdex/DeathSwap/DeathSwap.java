@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -21,6 +22,7 @@ public class DeathSwap extends JavaPlugin implements Listener {
 	public static PlayerSwapper ps = new PlayerSwapper();
 	public static String defaultWorld = "world";
 	public static Plugin plugin;
+	public static FileConfiguration config;
 	
 	public void onEnable() {
 		this.plugin = this;
@@ -28,6 +30,17 @@ public class DeathSwap extends JavaPlugin implements Listener {
 		PlayerInterface.loadWorld(); // Load world
 		this.getCommand("ds").setExecutor(new CommandManager(this));
 		this.getCommand("dsa").setExecutor(new CommandManager(this));
+		
+		try{
+			config = getConfig();
+			File DeathSwap = new File("plugins" + File.separator + "DeathSwap" + File.separator + "config.yml");
+			DeathSwap.mkdir();
+			
+			PlayerInterface.setConfig();
+			saveConfig();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 	
 	public void onDisable() {
