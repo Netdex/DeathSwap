@@ -17,7 +17,7 @@ public class PlayerInterface {
 		player.sendMessage(ChatColor.GOLD + "==================ADMIN COMMANDS=================");
 		player.sendMessage(ChatColor.GOLD + "/dsa start : Starts the game [OP]");
 		player.sendMessage(ChatColor.GOLD + "/dsa stop : Stops the game [OP]");
-		player.sendMessage(ChatColor.GOLD + "v2.9 Created by Netdex");
+		player.sendMessage(ChatColor.GOLD + "v3.2 Created by Netdex");
 		
 	}
 	

@@ -64,6 +64,7 @@ public class CommandManager implements CommandExecutor {
 					DeathSwap.playerQueue.remove(player.getName());
 					PlayerInterface.playerBroadcast(player.getName() + " has left DeathSwap.");
 					PlayerInterface.sendMessage(player, "You have left the game.");
+					player.teleport(Bukkit.getWorld(DeathSwap.defaultWorld).getSpawnLocation());
 					PlayerInterface.checkWinner();
 					return true;
 				}
@@ -113,6 +114,11 @@ public class CommandManager implements CommandExecutor {
 					return true;
 				}
 				DeathSwap.gameRunning = true; // Set game to running mode
+				if(DeathSwap.t != null){
+					if(DeathSwap.t.isAlive()){
+						DeathSwap.t.stop();
+					}
+				}
 				Random r = new Random();
 				for(String ply : DeathSwap.playerQueue){ // Teleports all players into world
 					Player p = Bukkit.getServer().getPlayer(ply);
@@ -128,7 +134,6 @@ public class CommandManager implements CommandExecutor {
 					p.teleport(new Location(Bukkit.getWorld("deathswap"), x, 128, z));
 					p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 600, 7)); // Resistance
 					PlayerInterface.sendMessage(p, "You have a 30 second invulnerability period. Enjoy falling.");
-					PlayerInterface.sendMessage(p, "You will have 3 minutes to prepare before swapping begins.");
 					
 					// Reset stats
 					p.setHealth(20);
@@ -154,6 +159,8 @@ public class CommandManager implements CommandExecutor {
 				}
 				DeathSwap.playerQueue.clear();
 				DeathSwap.ps.kill();
+				DeathSwap.ps.interrupt();
+				DeathSwap.t.interrupt();
 				return true;
 			}
 

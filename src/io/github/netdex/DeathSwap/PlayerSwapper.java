@@ -7,15 +7,11 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 public class PlayerSwapper extends Thread {
-	public static boolean isRunning = true;
+	public static volatile boolean isRunning = true;
 	
 	public void run(){
 		Random r = new Random();
-		try {Thread.sleep(60000);} catch (InterruptedException e1) {}
-		PlayerInterface.playerBroadcast("2 minutes remaining before swapping.");
-		try {Thread.sleep(60000);} catch (InterruptedException e1) {}
-		PlayerInterface.playerBroadcast("1 minute remaining before swapping.");
-		try {Thread.sleep(60000);} catch (InterruptedException e1) {}
+		try {Thread.sleep(120000);} catch (InterruptedException e1) {}
 		while(isRunning){
 			PlayerInterface.playerBroadcast("Swap!");
 			
