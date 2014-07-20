@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -20,17 +21,11 @@ public class DeathSwap extends JavaPlugin implements Listener {
 	public static boolean gameRunning = false;
 	public static Thread t;
 	public static PlayerSwapper ps = new PlayerSwapper();
-	public static String defaultWorld = "world";
+	public static Location defaultWorld;
 	public static Plugin plugin;
 	public static FileConfiguration config;
 	
 	public void onEnable() {
-		this.plugin = this;
-		getServer().getPluginManager().registerEvents(this, this); // Register listeners
-		PlayerInterface.loadWorld(); // Load world
-		this.getCommand("ds").setExecutor(new CommandManager(this));
-		this.getCommand("dsa").setExecutor(new CommandManager(this));
-		
 		try{
 			config = getConfig();
 			File DeathSwap = new File("plugins" + File.separator + "DeathSwap" + File.separator + "config.yml");
@@ -41,6 +36,13 @@ public class DeathSwap extends JavaPlugin implements Listener {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+		
+		this.plugin = this;
+		getServer().getPluginManager().registerEvents(this, this); // Register listeners
+		PlayerInterface.loadWorld(); // Load world
+		this.getCommand("ds").setExecutor(new CommandManager(this));
+		this.getCommand("dsa").setExecutor(new CommandManager(this));
+		defaultWorld = PlayerInterface.parseLocation(config.getString("defaultWorld"));
 	}
 	
 	public void onDisable() {
@@ -48,7 +50,7 @@ public class DeathSwap extends JavaPlugin implements Listener {
 		PlayerInterface.playerBroadcast("Game ended prematurely.");
 		for(Player p : Bukkit.getServer().getOnlinePlayers()){
 			if(playerQueue.contains(p.getName())){
-				p.teleport(Bukkit.getServer().getWorld(defaultWorld).getSpawnLocation());
+				p.teleport(defaultWorld);
 			}
 		}
 	}
@@ -61,7 +63,7 @@ public class DeathSwap extends JavaPlugin implements Listener {
 			playerQueue.remove(name);
 			PlayerInterface.checkWinner();
 			PlayerInterface.playerBroadcast(name + " has died. " + playerQueue.size() + " remain.");
-			player.teleport(Bukkit.getWorld(defaultWorld).getSpawnLocation());
+			player.teleport(defaultWorld);
 		}
 	}
 	
@@ -71,14 +73,15 @@ public class DeathSwap extends JavaPlugin implements Listener {
         if(playerQueue.contains(name) && gameRunning){
         	playerQueue.remove(name);
         	PlayerInterface.playerBroadcast(name + " has left DeathSwap.");
+        	Bukkit.getPlayer(name).teleport(defaultWorld);
+        	PlayerInterface.checkWinner();
         }
-        PlayerInterface.checkWinner();
     }
 	
 	@EventHandler
 	public void onVehicleRide(org.bukkit.event.vehicle.VehicleEnterEvent event){
 		String name = ((Player) event.getEntered()).getName();
-		if(playerQueue.contains(name)){
+		if(playerQueue.contains(name) && gameRunning){
 			event.setCancelled(true);
 			PlayerInterface.sendMessage((Player) event.getEntered(), "You cannot ride anything during DeathSwap.");
 		}

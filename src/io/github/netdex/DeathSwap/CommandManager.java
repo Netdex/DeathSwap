@@ -18,7 +18,6 @@ import org.bukkit.potion.PotionEffectType;
 
 public class CommandManager implements CommandExecutor {
 	private final DeathSwap plugin;
-	private int invincibility = DeathSwap.config.getInt("invincibleTicks");
 	private int maxPlayers = DeathSwap.config.getInt("maxPlayers");
 	
 	public CommandManager(DeathSwap plugin) {
@@ -66,7 +65,7 @@ public class CommandManager implements CommandExecutor {
 					DeathSwap.playerQueue.remove(player.getName());
 					PlayerInterface.playerBroadcast(player.getName() + " has left DeathSwap.");
 					PlayerInterface.sendMessage(player, "You have left the game.");
-					player.teleport(Bukkit.getWorld(DeathSwap.defaultWorld).getSpawnLocation());
+					player.teleport(DeathSwap.defaultWorld);
 					PlayerInterface.checkWinner();
 					return true;
 				}
@@ -135,7 +134,7 @@ public class CommandManager implements CommandExecutor {
 					}
 					
 					p.teleport(new Location(Bukkit.getWorld("deathswap"), x, 128, z));
-					
+					int invincibility = DeathSwap.config.getInt("invincibleTicks");
 					p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, invincibility, 7)); // Resistance
 					PlayerInterface.sendMessage(p, "You have a " + (invincibility/20) + " second invulnerability period. Enjoy falling.");
 					
@@ -158,7 +157,7 @@ public class CommandManager implements CommandExecutor {
 				PlayerInterface.playerBroadcast("Game has been stopped.");
 				for(Player p : Bukkit.getServer().getOnlinePlayers()){
 					if(DeathSwap.playerQueue.contains(p.getName())){
-						p.teleport(Bukkit.getServer().getWorld(DeathSwap.defaultWorld).getSpawnLocation());
+						p.teleport(DeathSwap.defaultWorld);
 					}
 				}
 				DeathSwap.playerQueue.clear();
@@ -167,7 +166,24 @@ public class CommandManager implements CommandExecutor {
 				DeathSwap.t.interrupt();
 				return true;
 			}
-
+			
+			if(args[0].equalsIgnoreCase("config")){
+				if(args.length > 1){
+					if(args[1].equalsIgnoreCase("setDefaultWorld")){
+						Location loc = player.getLocation();
+						String location = (loc.getWorld().getName() + "|" + loc.getX() + "|" + loc.getY() + "|" + loc.getZ());
+						DeathSwap.config.set("defaultWorld", location);
+						PlayerInterface.sendMessage(player, "Default world set to player location.");
+						plugin.saveConfig();
+						return true;
+					}
+					return false;
+				}
+				else{
+					PlayerInterface.help(player);
+					return true;
+				}
+			}
 			return false;
 		}
 		return false;

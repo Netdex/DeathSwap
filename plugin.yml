@@ -5,11 +5,11 @@ version: 3.3
 commands:
   ds:
     description: The main DeathSwap command.
-    usage: "[DeathSwap] Invalid command. Get help by typing /ds"
+    usage: "[DeathSwap] Invalid command. Get help by typing the command with no arguments."
     permission: DeathSwap.ds
     permission-message: "[DeathSwap] You don't have permission to use this command."
   dsa:
     description: The main admin DeathSwap command.
-    usage: "[DeathSwap] Invalid command. Get help by typing /ds"
+    usage: "[DeathSwap] Invalid command. Get help by typing the command with no arguments."
     permission: DeathSwap.dsa
     permission-message: "[DeathSwap] You don't have permission to use this command."
