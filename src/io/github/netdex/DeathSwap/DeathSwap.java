@@ -17,8 +17,7 @@ public class DeathSwap extends JavaPlugin implements Listener {
 	public static ArrayList<String> playerQueue = new ArrayList<String>();
 	public static World world;
 	public static boolean gameRunning = false;
-	public static Thread t;
-	public static PlayerSwapper ps = new PlayerSwapper();
+	public static Thread t = new PlayerSwapper();
 	public static String defaultWorld = "world";
 	public static Plugin plugin;
 	

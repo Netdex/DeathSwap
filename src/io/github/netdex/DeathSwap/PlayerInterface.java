@@ -17,7 +17,7 @@ public class PlayerInterface {
 		player.sendMessage(ChatColor.GOLD + "==================ADMIN COMMANDS=================");
 		player.sendMessage(ChatColor.GOLD + "/dsa start : Starts the game [OP]");
 		player.sendMessage(ChatColor.GOLD + "/dsa stop : Stops the game [OP]");
-		player.sendMessage(ChatColor.GOLD + "v2.9 Created by Netdex");
+		player.sendMessage(ChatColor.GOLD + "v3.0 Created by Netdex");
 		
 	}
 	
@@ -48,7 +48,7 @@ public class PlayerInterface {
 			PlayerInterface.allBroadcast(winner + " has won DeathSwap!");
 			Bukkit.getServer().getPlayer(winner).teleport(Bukkit.getWorld("world").getSpawnLocation());
 			DeathSwap.gameRunning = false;
-			DeathSwap.ps.kill();
+			DeathSwap.t.interrupt();
 		}
 	}
 	

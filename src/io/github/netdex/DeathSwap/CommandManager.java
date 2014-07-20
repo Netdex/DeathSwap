@@ -137,9 +137,7 @@ public class CommandManager implements CommandExecutor {
 					PlayerInventory inv = p.getInventory();
 					inv.clear();
 				}
-				DeathSwap.ps.revive();
 				DeathSwap.world.setTime(6000L); // Daytime
-				DeathSwap.t = new Thread(DeathSwap.ps); // Swap thread
 				DeathSwap.t.start();
 				return true;
 			}
@@ -153,7 +151,7 @@ public class CommandManager implements CommandExecutor {
 					}
 				}
 				DeathSwap.playerQueue.clear();
-				DeathSwap.ps.kill();
+				DeathSwap.t.interrupt();
 				return true;
 			}
 

@@ -25,15 +25,7 @@ public class PlayerSwapper extends Thread {
 			try {Thread.sleep(sleep);} catch (InterruptedException e) {}
 		}
 	}
-	
-	public void kill(){
-		isRunning = false;
-	}
-	
-	public void revive(){
-		isRunning = true;
-	}
-	
+
 	public static void swap(){
 		Location firstPlayer = Bukkit.getServer().getPlayer(DeathSwap.playerQueue.get(0)).getLocation();
 		for(int i = 0; i < DeathSwap.playerQueue.size(); i++){
