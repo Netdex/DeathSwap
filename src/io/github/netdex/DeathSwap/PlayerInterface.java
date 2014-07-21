@@ -19,7 +19,7 @@ public class PlayerInterface {
 		player.sendMessage(ChatColor.GOLD + "/dsa start : Starts the game [OP]");
 		player.sendMessage(ChatColor.GOLD + "/dsa stop : Stops the game [OP]");
 		player.sendMessage(ChatColor.GOLD + "/dsa config setDefaultWorld : Sets the default world [OP]");
-		player.sendMessage(ChatColor.GOLD + "v3.4 Created by Netdex");
+		player.sendMessage(ChatColor.GOLD + "v3.4.3 Created by Netdex");
 	}
 	
 	public static void sendMessage(Player player, String s){

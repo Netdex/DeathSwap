@@ -67,8 +67,8 @@ public class DeathSwap extends JavaPlugin implements Listener {
 		String name = event.getEntity().getName();
 		Player player = Bukkit.getServer().getPlayer(name);
 		if(playerQueue.contains(name) && gameRunning){ // Check if player is playing
-			playerQueue.remove(name);
 			PlayerInterface.playerBroadcast(name + " has died. " + playerQueue.size() + " remain.");
+			playerQueue.remove(name);
 			player.teleport(defaultWorld);
 			PlayerInterface.checkWinner();
 		}
@@ -83,11 +83,16 @@ public class DeathSwap extends JavaPlugin implements Listener {
 	 */
     public void onPlayerQuit(PlayerQuitEvent event) {
         String name = event.getPlayer().getName();
-        if(playerQueue.contains(name) && gameRunning){
+        if(playerQueue.contains(name)){
         	playerQueue.remove(name);
-        	PlayerInterface.playerBroadcast(name + " has left DeathSwap.");
-        	Bukkit.getPlayer(name).teleport(defaultWorld);
-        	PlayerInterface.checkWinner();
+        	if(gameRunning){
+            	PlayerInterface.playerBroadcast(name + " has left DeathSwap.");
+            	Bukkit.getPlayer(name).teleport(defaultWorld);
+            	PlayerInterface.checkWinner();
+        	}
+        	else{
+        		PlayerInterface.playerBroadcast(name + " has been kicked out of the DeathSwap queue.");
+        	}
         }
     }
 	
