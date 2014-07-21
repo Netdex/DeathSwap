@@ -7,6 +7,7 @@ import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.PlayerInventory;
 
 public class PlayerInterface {
 	
@@ -49,6 +50,8 @@ public class PlayerInterface {
 			DeathSwap.playerQueue.clear();
 			PlayerInterface.allBroadcast(winner + " has won DeathSwap!");
 			Bukkit.getServer().getPlayer(winner).teleport(DeathSwap.defaultWorld);
+			PlayerInventory inv = Bukkit.getServer().getPlayer(winner).getInventory();
+			inv.clear();
 			DeathSwap.gameRunning = false;
 			DeathSwap.ps.kill();
 		}
