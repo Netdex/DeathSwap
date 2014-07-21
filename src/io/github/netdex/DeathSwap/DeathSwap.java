@@ -3,6 +3,8 @@ package io.github.netdex.DeathSwap;
 import java.io.File;
 import java.util.ArrayList;
 
+import me.confuser.barapi.BarAPI;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -70,6 +72,7 @@ public class DeathSwap extends JavaPlugin implements Listener {
 			player.teleport(defaultWorld);
 			PlayerInterface.checkWinner();
 			PlayerInterface.updateBar();
+			BarAPI.removeBar(player);
 		}
 	}
 	
@@ -88,6 +91,7 @@ public class DeathSwap extends JavaPlugin implements Listener {
         	Bukkit.getPlayer(name).teleport(defaultWorld);
         	PlayerInterface.checkWinner();
         	PlayerInterface.updateBar();
+        	BarAPI.removeBar(Bukkit.getPlayer(name));
         }
     }
 	

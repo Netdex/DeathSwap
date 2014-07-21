@@ -103,7 +103,7 @@ public class PlayerInterface {
 	public static void updateBar(){
 		for(String ply : DeathSwap.playerQueue){
 			Player p = Bukkit.getPlayer(ply);
-			BarAPI.setMessage(p, ChatColor.BOLD + "[DeathSwap]" + ChatColor.GOLD + DeathSwap.playerQueue.size() + "/" + DeathSwap.maxPlayers + " players remain.");
+			BarAPI.setMessage(p, ChatColor.BOLD + "[DeathSwap]" + ChatColor.GOLD + DeathSwap.playerQueue.size() + "/" + DeathSwap.maxPlayers + " players are in the game.");
 			BarAPI.setHealth(p, DeathSwap.playerQueue.size()/DeathSwap.maxPlayers);
 		}
 	}
