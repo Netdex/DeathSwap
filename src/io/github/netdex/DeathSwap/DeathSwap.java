@@ -3,8 +3,6 @@ package io.github.netdex.DeathSwap;
 import java.io.File;
 import java.util.ArrayList;
 
-import me.confuser.barapi.BarAPI;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -53,10 +51,12 @@ public class DeathSwap extends JavaPlugin implements Listener {
 	
 	public void onDisable() {
 		getLogger().info("Removing all players...");
-		PlayerInterface.playerBroadcast("Game ended prematurely.");
-		for(Player p : Bukkit.getServer().getOnlinePlayers()){
-			if(playerQueue.contains(p.getName())){
-				p.teleport(defaultWorld);
+		if(gameRunning){
+			PlayerInterface.playerBroadcast("Game ended prematurely.");
+			for(Player p : Bukkit.getServer().getOnlinePlayers()){
+				if(playerQueue.contains(p.getName())){
+					p.teleport(defaultWorld);
+				}
 			}
 		}
 	}
@@ -71,8 +71,6 @@ public class DeathSwap extends JavaPlugin implements Listener {
 			PlayerInterface.playerBroadcast(name + " has died. " + playerQueue.size() + " remain.");
 			player.teleport(defaultWorld);
 			PlayerInterface.checkWinner();
-			PlayerInterface.updateBar();
-			BarAPI.removeBar(player);
 		}
 	}
 	
@@ -90,8 +88,6 @@ public class DeathSwap extends JavaPlugin implements Listener {
         	PlayerInterface.playerBroadcast(name + " has left DeathSwap.");
         	Bukkit.getPlayer(name).teleport(defaultWorld);
         	PlayerInterface.checkWinner();
-        	PlayerInterface.updateBar();
-        	BarAPI.removeBar(Bukkit.getPlayer(name));
         }
     }
 	

@@ -2,8 +2,6 @@ package io.github.netdex.DeathSwap;
 
 import java.util.Random;
 
-import me.confuser.barapi.BarAPI;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -56,7 +54,6 @@ public class CommandManager implements CommandExecutor {
 				}
 				DeathSwap.playerQueue.add(player.getName()); // Normal action
 				PlayerInterface.sendMessage(player, "You are " + DeathSwap.playerQueue.size() + "/" + DeathSwap.maxPlayers + " in the queue.");
-				PlayerInterface.updateBar();
 				return true;
 			}
 			
@@ -72,8 +69,6 @@ public class CommandManager implements CommandExecutor {
 					PlayerInterface.sendMessage(player, "You have left the game.");
 					player.teleport(DeathSwap.defaultWorld);
 					PlayerInterface.checkWinner();
-					PlayerInterface.updateBar();
-					BarAPI.removeBar(player);
 					return true;
 				}
 				if(DeathSwap.playerQueue.contains(player.getName())){ // Check if player in queue
@@ -155,7 +150,6 @@ public class CommandManager implements CommandExecutor {
 				DeathSwap.world.setTime(6000L); // Daytime
 				DeathSwap.t = new Thread(DeathSwap.ps); // Swap thread
 				DeathSwap.t.start();
-				PlayerInterface.updateBar();
 				return true;
 			}
 			
@@ -172,10 +166,6 @@ public class CommandManager implements CommandExecutor {
 				DeathSwap.ps.interrupt();
 				DeathSwap.t.interrupt();
 				
-				for(String ply : DeathSwap.playerQueue){
-					Player p = Bukkit.getPlayer(ply);
-					BarAPI.removeBar(p);
-				}
 				return true;
 			}
 			

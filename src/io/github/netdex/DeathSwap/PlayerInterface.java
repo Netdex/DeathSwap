@@ -1,7 +1,5 @@
 package io.github.netdex.DeathSwap;
 
-import me.confuser.barapi.BarAPI;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -53,10 +51,6 @@ public class PlayerInterface {
 			Bukkit.getServer().getPlayer(winner).teleport(DeathSwap.defaultWorld);
 			DeathSwap.gameRunning = false;
 			DeathSwap.ps.kill();
-			for(String ply : DeathSwap.playerQueue){
-				Player p = Bukkit.getPlayer(ply);
-				BarAPI.removeBar(p);
-			}
 		}
 	}
 	
@@ -99,12 +93,4 @@ public class PlayerInterface {
 		return finalloc;
 	}
 	
-	@SuppressWarnings("deprecation")
-	public static void updateBar(){
-		for(String ply : DeathSwap.playerQueue){
-			Player p = Bukkit.getPlayer(ply);
-			BarAPI.setMessage(p, ChatColor.BOLD + "[DeathSwap]" + ChatColor.GOLD + DeathSwap.playerQueue.size() + "/" + DeathSwap.maxPlayers + " players are in the game.");
-			BarAPI.setHealth(p, DeathSwap.playerQueue.size()/DeathSwap.maxPlayers);
-		}
-	}
 }
