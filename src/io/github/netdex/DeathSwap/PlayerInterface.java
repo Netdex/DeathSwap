@@ -1,5 +1,7 @@
 package io.github.netdex.DeathSwap;
 
+import me.confuser.barapi.BarAPI;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -19,8 +21,7 @@ public class PlayerInterface {
 		player.sendMessage(ChatColor.GOLD + "/dsa start : Starts the game [OP]");
 		player.sendMessage(ChatColor.GOLD + "/dsa stop : Stops the game [OP]");
 		player.sendMessage(ChatColor.GOLD + "/dsa config setDefaultWorld : Sets the default world [OP]");
-		player.sendMessage(ChatColor.GOLD + "v3.3 Created by Netdex");
-		
+		player.sendMessage(ChatColor.GOLD + "v3.4 Created by Netdex");
 	}
 	
 	public static void sendMessage(Player player, String s){
@@ -43,6 +44,7 @@ public class PlayerInterface {
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	public static void checkWinner(){
 		if(DeathSwap.playerQueue.size() == 1){
 			String winner = DeathSwap.playerQueue.get(0);
@@ -51,6 +53,10 @@ public class PlayerInterface {
 			Bukkit.getServer().getPlayer(winner).teleport(DeathSwap.defaultWorld);
 			DeathSwap.gameRunning = false;
 			DeathSwap.ps.kill();
+			for(String ply : DeathSwap.playerQueue){
+				Player p = Bukkit.getPlayer(ply);
+				BarAPI.removeBar(p);
+			}
 		}
 	}
 	
@@ -63,21 +69,17 @@ public class PlayerInterface {
 	}
 	
 	public static void setConfig(){
-		if(!DeathSwap.config.contains("invincibleTicks")){
+		// Check if config contains necessary values
+		if(!DeathSwap.config.contains("invincibleTicks"))
 			DeathSwap.config.set("invincibleTicks", 600);
-		}
-		if(!DeathSwap.config.contains("graceTime")){
+		if(!DeathSwap.config.contains("graceTime"))
 			DeathSwap.config.set("graceTime", 60);
-		}
-		if(!DeathSwap.config.contains("minSwapTime")){
+		if(!DeathSwap.config.contains("minSwapTime"))
 			DeathSwap.config.set("minSwapTime", 60);
-		}
-		if(!DeathSwap.config.contains("maxSwapTime")){
+		if(!DeathSwap.config.contains("maxSwapTime"))
 			DeathSwap.config.set("maxSwapTime", 120);
-		}
-		if(!DeathSwap.config.contains("maxPlayers")){
+		if(!DeathSwap.config.contains("maxPlayers"))
 			DeathSwap.config.set("maxPlayers", 4);
-		}
 		if(!DeathSwap.config.contains("defaultWorld")){
 			Location loc = Bukkit.getWorld("world").getSpawnLocation();
 			String location = (loc.getWorld().getName() + "|" + loc.getX() + "|" + loc.getY() + "|" + loc.getZ());
@@ -95,5 +97,14 @@ public class PlayerInterface {
 		 
 		Location finalloc = new Location(world, x, y, z);
 		return finalloc;
+	}
+	
+	@SuppressWarnings("deprecation")
+	public static void updateBar(){
+		for(String ply : DeathSwap.playerQueue){
+			Player p = Bukkit.getPlayer(ply);
+			BarAPI.setMessage(p, ChatColor.BOLD + "[DeathSwap]" + ChatColor.GOLD + DeathSwap.playerQueue.size() + "/" + DeathSwap.maxPlayers + " players remain.");
+			BarAPI.setHealth(p, DeathSwap.playerQueue.size()/DeathSwap.maxPlayers);
+		}
 	}
 }

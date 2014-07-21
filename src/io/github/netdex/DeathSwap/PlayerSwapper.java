@@ -10,6 +10,7 @@ public class PlayerSwapper extends Thread {
 	public static volatile boolean isRunning = true;
 	
 	public void run(){
+		// Get values from config
 		int graceTime = DeathSwap.config.getInt("graceTime");
 		int minSwap = DeathSwap.config.getInt("minSwapTime");
 		int maxSwap = DeathSwap.config.getInt("maxSwapTime");
@@ -34,6 +35,7 @@ public class PlayerSwapper extends Thread {
 		isRunning = true;
 	}
 	
+	@SuppressWarnings("deprecation")
 	public static void swap(){
 		Location firstPlayer = Bukkit.getServer().getPlayer(DeathSwap.playerQueue.get(0)).getLocation();
 		for(int i = 0; i < DeathSwap.playerQueue.size(); i++){

@@ -22,10 +22,12 @@ public class DeathSwap extends JavaPlugin implements Listener {
 	public static Thread t;
 	public static PlayerSwapper ps = new PlayerSwapper();
 	public static Location defaultWorld;
-	public static Plugin plugin;
+	public Plugin plugin;
 	public static FileConfiguration config;
+	public static int maxPlayers;
 	
 	public void onEnable() {
+		// Load and create configuration
 		try{
 			config = getConfig();
 			File DeathSwap = new File("plugins" + File.separator + "DeathSwap" + File.separator + "config.yml");
@@ -42,7 +44,9 @@ public class DeathSwap extends JavaPlugin implements Listener {
 		PlayerInterface.loadWorld(); // Load world
 		this.getCommand("ds").setExecutor(new CommandManager(this));
 		this.getCommand("dsa").setExecutor(new CommandManager(this));
+		
 		defaultWorld = PlayerInterface.parseLocation(config.getString("defaultWorld"));
+		maxPlayers = DeathSwap.config.getInt("maxPlayers");
 	}
 	
 	public void onDisable() {
@@ -55,19 +59,27 @@ public class DeathSwap extends JavaPlugin implements Listener {
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onDeath(PlayerDeathEvent event){ // Check dying players
 		String name = event.getEntity().getName();
 		Player player = Bukkit.getServer().getPlayer(name);
 		if(playerQueue.contains(name) && gameRunning){ // Check if player is playing
 			playerQueue.remove(name);
-			PlayerInterface.checkWinner();
 			PlayerInterface.playerBroadcast(name + " has died. " + playerQueue.size() + " remain.");
 			player.teleport(defaultWorld);
+			PlayerInterface.checkWinner();
+			PlayerInterface.updateBar();
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	@EventHandler
+	/**
+	 * When a player quits and the game is running, remove the players name from the queue, 
+	 * then tell everyone and themselves that they have left, then teleport the player back to the spawn.
+	 * After that, check for a winner.
+	 */
     public void onPlayerQuit(PlayerQuitEvent event) {
         String name = event.getPlayer().getName();
         if(playerQueue.contains(name) && gameRunning){
@@ -75,6 +87,7 @@ public class DeathSwap extends JavaPlugin implements Listener {
         	PlayerInterface.playerBroadcast(name + " has left DeathSwap.");
         	Bukkit.getPlayer(name).teleport(defaultWorld);
         	PlayerInterface.checkWinner();
+        	PlayerInterface.updateBar();
         }
     }
 	

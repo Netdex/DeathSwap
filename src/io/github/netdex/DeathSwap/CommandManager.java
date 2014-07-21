@@ -18,12 +18,13 @@ import org.bukkit.potion.PotionEffectType;
 
 public class CommandManager implements CommandExecutor {
 	private final DeathSwap plugin;
-	private int maxPlayers = DeathSwap.config.getInt("maxPlayers");
+	
 	
 	public CommandManager(DeathSwap plugin) {
 		this.plugin = plugin;
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		// Normal player command
@@ -47,26 +48,28 @@ public class CommandManager implements CommandExecutor {
 					PlayerInterface.sendMessage(player, "You are already in the queue.");
 					return true;
 				}
-				if(DeathSwap.playerQueue.size() == maxPlayers){ // Check if queue full
+				if(DeathSwap.playerQueue.size() == DeathSwap.maxPlayers){ // Check if queue full
 					PlayerInterface.sendMessage(player, "The DeathSwap lobby is currently full.");
 					return true;
 				}
 				DeathSwap.playerQueue.add(player.getName()); // Normal action
-				PlayerInterface.sendMessage(player, "You are " + DeathSwap.playerQueue.size() + "/" + maxPlayers + " in the queue.");
+				PlayerInterface.sendMessage(player, "You are " + DeathSwap.playerQueue.size() + "/" + DeathSwap.maxPlayers + " in the queue.");
 				return true;
 			}
 			
 			if(args[0].equalsIgnoreCase("leave")){ // Leave queue
 				if(DeathSwap.gameRunning){ // Check if game running, if so, then register kill event
-					if(!DeathSwap.playerQueue.contains(player.getName())){
+					if(!DeathSwap.playerQueue.contains(player.getName())){ // Check if player is in the queue
 						PlayerInterface.sendMessage(player, "You are not in the queue.");
 						return true;
 					}
+					// Remove player from queue, tell everyone they have left, teleport them back, check winner
 					DeathSwap.playerQueue.remove(player.getName());
 					PlayerInterface.playerBroadcast(player.getName() + " has left DeathSwap.");
 					PlayerInterface.sendMessage(player, "You have left the game.");
 					player.teleport(DeathSwap.defaultWorld);
 					PlayerInterface.checkWinner();
+					PlayerInterface.updateBar();
 					return true;
 				}
 				if(DeathSwap.playerQueue.contains(player.getName())){ // Check if player in queue
@@ -80,8 +83,7 @@ public class CommandManager implements CommandExecutor {
 			}
 			
 			if(args[0].equalsIgnoreCase("list")){ // List players
-				PlayerInterface.sendMessage(player, "Player List : " + DeathSwap.playerQueue.size() + "/" + maxPlayers);
-				Player[] players = Bukkit.getServer().getOnlinePlayers();
+				PlayerInterface.sendMessage(player, "Player List : " + DeathSwap.playerQueue.size() + "/" + DeathSwap.maxPlayers);
 				if(DeathSwap.playerQueue.size() == 0){
 					player.sendMessage(ChatColor.GOLD + "There are no players in queue.");
 					return true;
