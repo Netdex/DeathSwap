@@ -115,7 +115,7 @@ public class CommandManager implements CommandExecutor {
 					PlayerInterface.sendMessage(player, "Game is already started.");
 					return true;
 				}
-				DeathSwap.gameRunning = true; // Set game to running mode
+				
 				if(DeathSwap.t != null){
 					if(DeathSwap.t.isAlive()){
 						DeathSwap.t.stop();
@@ -146,6 +146,7 @@ public class CommandManager implements CommandExecutor {
 					PlayerInventory inv = p.getInventory();
 					inv.clear();
 				}
+				DeathSwap.gameRunning = true; // Set game to running mode
 				DeathSwap.ps.revive();
 				DeathSwap.world.setTime(6000L); // Daytime
 				DeathSwap.t = new Thread(DeathSwap.ps); // Swap thread

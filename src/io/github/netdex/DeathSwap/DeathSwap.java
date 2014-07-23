@@ -2,16 +2,28 @@ package io.github.netdex.DeathSwap;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
+import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -25,6 +37,7 @@ public class DeathSwap extends JavaPlugin implements Listener {
 	public Plugin plugin;
 	public static FileConfiguration config;
 	public static int maxPlayers;
+	public static HashMap<String, Long> smashCool = new HashMap<String, Long>();
 	
 	public void onEnable() {
 		// Load and create configuration
@@ -105,4 +118,53 @@ public class DeathSwap extends JavaPlugin implements Listener {
 		}
 	}
 	
+	@EventHandler
+	public void onPortalTeleport(org.bukkit.event.player.PlayerPortalEvent event){
+		String name = event.getPlayer().getName();
+		if(playerQueue.contains(name) && gameRunning){
+			event.setCancelled(true);
+			PlayerInterface.sendMessage(event.getPlayer(), "You may not portal during DeathSwap.");
+		}
+	}
+	
+	@EventHandler
+	public void onPlayerInteract(org.bukkit.event.player.PlayerInteractEvent event){
+		if(event.getAction() == Action.RIGHT_CLICK_BLOCK){
+			Player player = event.getPlayer();
+			if(playerQueue.contains(player.getName()) && gameRunning){
+				if(smashCool.get(player.getName()) == null){
+					smashCool.put(player.getName(), (long) 30001);
+				}
+				long cooldown = smashCool.get(player.getName());
+				long elapsed = System.currentTimeMillis() - cooldown;
+				PlayerInventory inv = player.getInventory();
+				ItemStack held = inv.getItemInHand();
+				if(held.getType() == Material.GOLD_AXE){ // Check held item
+					if(elapsed > 30000){ // Check cooldown
+						PlayerInterface.playerBroadcast(player.getName() + " used entity smash!");
+						
+						Firework fw = (Firework) player.getWorld().spawnEntity(player.getLocation(), EntityType.FIREWORK);
+						FireworkMeta fwm = fw.getFireworkMeta();
+						FireworkEffect effect = FireworkEffect.builder().withColor(Color.RED).withColor(Color.ORANGE).withColor(Color.YELLOW).with(Type.BALL_LARGE).build();
+						fwm.addEffects(effect);
+						fwm.setPower(0); 
+						fw.setFireworkMeta(fwm);
+						
+						for(Entity e : player.getNearbyEntities(10, 10, 10)){ // Set fire to all entities within 10 block radius
+							e.setFireTicks(300);
+						}
+						smashCool.put(player.getName(), System.currentTimeMillis());
+					}
+					else{ // Cooldown not complete
+						int remaining = (int) ((30000 - elapsed)/1000);
+						PlayerInterface.sendMessage(player,"You must wait " + remaining + " seconds before using this ability again.");
+					}
+				}
+				else{
+					
+				}
+			}
+		}
+		
+	}
 }
