@@ -155,17 +155,22 @@ public class CommandManager implements CommandExecutor {
 			}
 			
 			if(args[0].equalsIgnoreCase("stop")){ // Stops game
-				DeathSwap.gameRunning = false;
-				FunctionManager.playerBroadcast("Game has been stopped.");
-				for(Player p : Bukkit.getServer().getOnlinePlayers()){
-					if(DeathSwap.playerQueue.contains(p.getName())){
-						p.teleport(DeathSwap.defaultWorld);
+				if(DeathSwap.gameRunning){
+					DeathSwap.gameRunning = false;
+					FunctionManager.playerBroadcast("Game has been stopped.");
+					for(Player p : Bukkit.getServer().getOnlinePlayers()){
+						if(DeathSwap.playerQueue.contains(p.getName())){
+							p.teleport(DeathSwap.defaultWorld);
+						}
 					}
+					DeathSwap.playerQueue.clear();
+					DeathSwap.ps.kill();
+					DeathSwap.ps.interrupt();
+					DeathSwap.t.interrupt();
 				}
-				DeathSwap.playerQueue.clear();
-				DeathSwap.ps.kill();
-				DeathSwap.ps.interrupt();
-				DeathSwap.t.interrupt();
+				else{
+					FunctionManager.sendMessage(player, "DeathSwap is not running.");
+				}
 				
 				return true;
 			}

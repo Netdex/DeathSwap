@@ -59,13 +59,13 @@ public class PlayerSwapper extends Thread {
 			else{
 				p.teleport(Bukkit.getServer().getPlayer(randomNames.get(i+1)).getLocation());
 			}
-			p.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 200 ,10));
+			p.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 175 ,10));
 			giveGift(p);
 		}
 	}
 	
 	public static void giveGift(Player player){
-		int giveChance = r.nextInt(4);
+		int giveChance = r.nextInt(3);
 		if(giveChance == 0){
 			PlayerInventory inv = player.getInventory();
 			int rand = r.nextInt(13);
@@ -99,7 +99,7 @@ public class PlayerSwapper extends Thread {
 				ItemStack piston = new ItemStack(Material.PISTON_STICKY_BASE, 1);
 				inv.addItem(piston);
 			}
-			player.playSound(player.getLocation(), Sound.CREEPER_DEATH, 10, 1);
+			player.playSound(player.getLocation(), Sound.FIREWORK_LAUNCH, 10, 1);
 		}
 		
 	}

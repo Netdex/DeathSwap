@@ -50,6 +50,7 @@ public class DeathSwap extends JavaPlugin implements Listener {
 		maxPlayers = DeathSwap.config.getInt("maxPlayers");
 	}
 
+	@SuppressWarnings("deprecation")
 	public void onDisable() {
 		getLogger().info("Removing all players...");
 		if(gameRunning){
@@ -59,6 +60,15 @@ public class DeathSwap extends JavaPlugin implements Listener {
 					p.teleport(defaultWorld);
 				}
 			}
+			if(DeathSwap.t != null){
+				if(DeathSwap.t.isAlive()){
+					DeathSwap.ps.kill();
+					DeathSwap.ps.interrupt();
+					DeathSwap.t.interrupt();
+					DeathSwap.t.stop();
+				}
+			}
+			DeathSwap.playerQueue.clear();
 		}
 	}
 
