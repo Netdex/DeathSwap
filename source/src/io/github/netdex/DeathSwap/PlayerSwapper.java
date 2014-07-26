@@ -7,6 +7,7 @@ import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -25,7 +26,7 @@ public class PlayerSwapper extends Thread {
 		
 		try {Thread.sleep(graceTime * 1000);} catch (InterruptedException e1) {}
 		while(isRunning){
-			PlayerInterface.playerBroadcast("Swap!");
+			FunctionManager.playerBroadcast("Swap!");
 			
 			swap();
 			
@@ -69,31 +70,31 @@ public class PlayerSwapper extends Thread {
 			PlayerInventory inv = player.getInventory();
 			int rand = r.nextInt(10);
 			if(rand >= 0 && rand < 5){
-				PlayerInterface.sendMessage(player, "You have been gifted some redstone!");
+				FunctionManager.sendMessage(player, "You have been gifted some redstone!");
 				ItemStack redstone = new ItemStack(Material.REDSTONE, 3);
 				inv.addItem(redstone);
 			}
 			else if(rand >= 5 && rand < 7){
-				PlayerInterface.sendMessage(player, "You have been gifted some obsidian!");
+				FunctionManager.sendMessage(player, "You have been gifted some obsidian!");
 				ItemStack obsidian = new ItemStack(Material.OBSIDIAN, 3);
 				inv.addItem(obsidian);
 			}
 			else if(rand == 7){
-				PlayerInterface.sendMessage(player, "You have been gifted some TNT!");
+				FunctionManager.sendMessage(player, "You have been gifted some TNT!");
 				ItemStack tnt = new ItemStack(Material.TNT, 1);
 				inv.addItem(tnt);
 			}
 			else if(rand == 8){
-				PlayerInterface.sendMessage(player, "You have been gifted a blaze rod!");
+				FunctionManager.sendMessage(player, "You have been gifted a blaze rod!");
 				ItemStack blazerod = new ItemStack(Material.BLAZE_ROD, 1);
 				inv.addItem(blazerod);
 			}
 			else if(rand == 9){
-				PlayerInterface.sendMessage(player, "You have been gifted a piston!");
+				FunctionManager.sendMessage(player, "You have been gifted a piston!");
 				ItemStack piston = new ItemStack(Material.PISTON_STICKY_BASE, 1);
 				inv.addItem(piston);
 			}
-			
+			player.playSound(player.getLocation(), Sound.CREEPER_DEATH, 10, 1);
 		}
 		
 	}
