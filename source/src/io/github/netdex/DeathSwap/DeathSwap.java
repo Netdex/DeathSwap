@@ -2,23 +2,16 @@ package io.github.netdex.DeathSwap;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Effect;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -41,7 +34,7 @@ public class DeathSwap extends JavaPlugin implements Listener {
 			File DeathSwap = new File("plugins" + File.separator + "DeathSwap" + File.separator + "config.yml");
 			DeathSwap.mkdir();
 
-			PlayerInterface.setConfig();
+			FunctionManager.setConfig();
 			saveConfig();
 		}catch(Exception e){
 			e.printStackTrace();
@@ -49,18 +42,18 @@ public class DeathSwap extends JavaPlugin implements Listener {
 
 		this.plugin = this;
 		getServer().getPluginManager().registerEvents(this, this); // Register listeners
-		PlayerInterface.loadWorld(); // Load world
+		FunctionManager.loadWorld(); // Load world
 		this.getCommand("ds").setExecutor(new CommandManager(this));
 		this.getCommand("dsa").setExecutor(new CommandManager(this));
 
-		defaultWorld = PlayerInterface.parseLocation(config.getString("defaultWorld"));
+		defaultWorld = FunctionManager.parseLocation(config.getString("defaultWorld"));
 		maxPlayers = DeathSwap.config.getInt("maxPlayers");
 	}
 
 	public void onDisable() {
 		getLogger().info("Removing all players...");
 		if(gameRunning){
-			PlayerInterface.playerBroadcast("Game ended prematurely.");
+			FunctionManager.playerBroadcast("Game ended prematurely.");
 			for(Player p : Bukkit.getServer().getOnlinePlayers()){
 				if(playerQueue.contains(p.getName())){
 					p.teleport(defaultWorld);
@@ -75,10 +68,10 @@ public class DeathSwap extends JavaPlugin implements Listener {
 		String name = event.getEntity().getName();
 		Player player = Bukkit.getServer().getPlayer(name);
 		if(playerQueue.contains(name) && gameRunning){ // Check if player is playing
-			PlayerInterface.playerBroadcast(name + " has died. " + playerQueue.size() + " remain.");
+			FunctionManager.playerBroadcast(name + " has died. " + playerQueue.size() + " remain.");
 			playerQueue.remove(name);
 			player.teleport(defaultWorld);
-			PlayerInterface.checkWinner();
+			FunctionManager.checkWinner();
 		}
 	}
 
@@ -94,12 +87,12 @@ public class DeathSwap extends JavaPlugin implements Listener {
 		if(playerQueue.contains(name)){
 			playerQueue.remove(name);
 			if(gameRunning){
-				PlayerInterface.playerBroadcast(name + " has left DeathSwap.");
+				FunctionManager.playerBroadcast(name + " has left DeathSwap.");
 				Bukkit.getPlayer(name).teleport(defaultWorld);
-				PlayerInterface.checkWinner();
+				FunctionManager.checkWinner();
 			}
 			else{
-				PlayerInterface.playerBroadcast(name + " has been kicked out of the DeathSwap queue.");
+				FunctionManager.playerBroadcast(name + " has been kicked out of the DeathSwap queue.");
 			}
 		}
 	}
@@ -109,7 +102,7 @@ public class DeathSwap extends JavaPlugin implements Listener {
 		String name = ((Player) event.getEntered()).getName();
 		if(playerQueue.contains(name) && gameRunning){
 			event.setCancelled(true);
-			PlayerInterface.sendMessage((Player) event.getEntered(), "You cannot ride anything during DeathSwap.");
+			FunctionManager.sendMessage((Player) event.getEntered(), "You cannot ride anything during DeathSwap.");
 		}
 	}
 
@@ -118,7 +111,7 @@ public class DeathSwap extends JavaPlugin implements Listener {
 		String name = event.getPlayer().getName();
 		if(playerQueue.contains(name) && gameRunning){
 			event.setCancelled(true);
-			PlayerInterface.sendMessage(event.getPlayer(), "You may not portal during DeathSwap.");
+			FunctionManager.sendMessage(event.getPlayer(), "You may not portal during DeathSwap.");
 		}
 	}
 

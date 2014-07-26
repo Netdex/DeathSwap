@@ -35,54 +35,54 @@ public class CommandManager implements CommandExecutor {
 			}
 			Player player = (Player) sender;
 			if(args.length == 0){ // Incorrect command
-				PlayerInterface.help(player);
+				FunctionManager.help(player);
 				return true;
 			}
 			
 			if(args[0].equalsIgnoreCase("join")){ // Join queue
 				if(DeathSwap.gameRunning){ // Check if game running
-					PlayerInterface.sendMessage(player, "The game is currently in progress.");
+					FunctionManager.sendMessage(player, "The game is currently in progress.");
 					return true;
 				}
 				if(DeathSwap.playerQueue.contains(player.getName())){ // Check if player in queue
-					PlayerInterface.sendMessage(player, "You are already in the queue.");
+					FunctionManager.sendMessage(player, "You are already in the queue.");
 					return true;
 				}
 				if(DeathSwap.playerQueue.size() == DeathSwap.maxPlayers){ // Check if queue full
-					PlayerInterface.sendMessage(player, "The DeathSwap lobby is currently full.");
+					FunctionManager.sendMessage(player, "The DeathSwap lobby is currently full.");
 					return true;
 				}
 				DeathSwap.playerQueue.add(player.getName()); // Normal action
-				PlayerInterface.sendMessage(player, "You are " + DeathSwap.playerQueue.size() + "/" + DeathSwap.maxPlayers + " in the queue.");
+				FunctionManager.sendMessage(player, "You are " + DeathSwap.playerQueue.size() + "/" + DeathSwap.maxPlayers + " in the queue.");
 				return true;
 			}
 			
 			if(args[0].equalsIgnoreCase("leave")){ // Leave queue
 				if(DeathSwap.gameRunning){ // Check if game running, if so, then register kill event
 					if(!DeathSwap.playerQueue.contains(player.getName())){ // Check if player is in the queue
-						PlayerInterface.sendMessage(player, "You are not in the queue.");
+						FunctionManager.sendMessage(player, "You are not in the queue.");
 						return true;
 					}
 					// Remove player from queue, tell everyone they have left, teleport them back, check winner
 					DeathSwap.playerQueue.remove(player.getName());
-					PlayerInterface.playerBroadcast(player.getName() + " has left DeathSwap.");
-					PlayerInterface.sendMessage(player, "You have left the game.");
+					FunctionManager.playerBroadcast(player.getName() + " has left DeathSwap.");
+					FunctionManager.sendMessage(player, "You have left the game.");
 					player.teleport(DeathSwap.defaultWorld);
-					PlayerInterface.checkWinner();
+					FunctionManager.checkWinner();
 					return true;
 				}
 				if(DeathSwap.playerQueue.contains(player.getName())){ // Check if player in queue
 					DeathSwap.playerQueue.remove(player.getName());
-					PlayerInterface.sendMessage(player, "You have been removed from the queue.");
+					FunctionManager.sendMessage(player, "You have been removed from the queue.");
 					return true;
 				}
 				// Normal action
-				PlayerInterface.sendMessage(player, "You are not in the queue.");
+				FunctionManager.sendMessage(player, "You are not in the queue.");
 				return true;
 			}
 			
 			if(args[0].equalsIgnoreCase("list")){ // List players
-				PlayerInterface.sendMessage(player, "Player List : " + DeathSwap.playerQueue.size() + "/" + DeathSwap.maxPlayers);
+				FunctionManager.sendMessage(player, "Player List : " + DeathSwap.playerQueue.size() + "/" + DeathSwap.maxPlayers);
 				if(DeathSwap.playerQueue.size() == 0){
 					player.sendMessage(ChatColor.GOLD + "There are no players in queue.");
 					return true;
@@ -103,16 +103,16 @@ public class CommandManager implements CommandExecutor {
 			}
 			Player player = (Player) sender;
 			if(args.length == 0){ // Check args length
-				PlayerInterface.help(player);
+				FunctionManager.help(player);
 				return true;
 			}
 			if(args[0].equalsIgnoreCase("start")){ // Starts game
 				if(DeathSwap.playerQueue.size() < 2){ // Check enough players
-					PlayerInterface.sendMessage(player, "Not enough players to start game.");
+					FunctionManager.sendMessage(player, "Not enough players to start game.");
 					return true;
 				}
 				if(DeathSwap.gameRunning){ // Check if game is already started
-					PlayerInterface.sendMessage(player, "Game is already started.");
+					FunctionManager.sendMessage(player, "Game is already started.");
 					return true;
 				}
 				
@@ -137,7 +137,7 @@ public class CommandManager implements CommandExecutor {
 					p.teleport(new Location(Bukkit.getWorld("deathswap"), x, 128, z));
 					int invincibility = DeathSwap.config.getInt("invincibleTicks");
 					p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, invincibility, 7)); // Resistance
-					PlayerInterface.sendMessage(p, "You have a " + (invincibility/20) + " second invulnerability period. Enjoy falling.");
+					FunctionManager.sendMessage(p, "You have a " + (invincibility/20) + " second invulnerability period. Enjoy falling.");
 					
 					// Reset stats
 					p.setHealth(20);
@@ -156,7 +156,7 @@ public class CommandManager implements CommandExecutor {
 			
 			if(args[0].equalsIgnoreCase("stop")){ // Stops game
 				DeathSwap.gameRunning = false;
-				PlayerInterface.playerBroadcast("Game has been stopped.");
+				FunctionManager.playerBroadcast("Game has been stopped.");
 				for(Player p : Bukkit.getServer().getOnlinePlayers()){
 					if(DeathSwap.playerQueue.contains(p.getName())){
 						p.teleport(DeathSwap.defaultWorld);
@@ -176,14 +176,14 @@ public class CommandManager implements CommandExecutor {
 						Location loc = player.getLocation();
 						String location = (loc.getWorld().getName() + "|" + loc.getX() + "|" + loc.getY() + "|" + loc.getZ());
 						DeathSwap.config.set("defaultWorld", location);
-						PlayerInterface.sendMessage(player, "Default world set to player location.");
+						FunctionManager.sendMessage(player, "Default world set to player location.");
 						plugin.saveConfig();
 						return true;
 					}
 					return false;
 				}
 				else{
-					PlayerInterface.help(player);
+					FunctionManager.help(player);
 					return true;
 				}
 			}
