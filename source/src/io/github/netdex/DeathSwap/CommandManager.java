@@ -3,7 +3,6 @@ package io.github.netdex.DeathSwap;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.block.Biome;
@@ -34,63 +33,22 @@ public class CommandManager implements CommandExecutor {
 				return true;
 			}
 			Player player = (Player) sender;
-			if(args.length == 0){ // Incorrect command
-				FunctionManager.help(player);
+			if(args.length == 0){ // Open menu
+				DeathSwap.menu.show(player);
 				return true;
 			}
 			
 			if(args[0].equalsIgnoreCase("join")){ // Join queue
-				if(DeathSwap.gameRunning){ // Check if game running
-					FunctionManager.sendMessage(player, "The game is currently in progress.");
-					return true;
-				}
-				if(DeathSwap.playerQueue.contains(player.getName())){ // Check if player in queue
-					FunctionManager.sendMessage(player, "You are already in the queue.");
-					return true;
-				}
-				if(DeathSwap.playerQueue.size() == DeathSwap.maxPlayers){ // Check if queue full
-					FunctionManager.sendMessage(player, "The DeathSwap lobby is currently full.");
-					return true;
-				}
-				DeathSwap.playerQueue.add(player.getName()); // Normal action
-				FunctionManager.sendMessage(player, "You are " + DeathSwap.playerQueue.size() + "/" + DeathSwap.maxPlayers + " in the queue.");
+				GameHandler.joinGame(player);
 				return true;
 			}
 			
 			if(args[0].equalsIgnoreCase("leave")){ // Leave queue
-				if(DeathSwap.gameRunning){ // Check if game running, if so, then register kill event
-					if(!DeathSwap.playerQueue.contains(player.getName())){ // Check if player is in the queue
-						FunctionManager.sendMessage(player, "You are not in the queue.");
-						return true;
-					}
-					// Remove player from queue, tell everyone they have left, teleport them back, check winner
-					DeathSwap.playerQueue.remove(player.getName());
-					FunctionManager.playerBroadcast(player.getName() + " has left DeathSwap.");
-					FunctionManager.sendMessage(player, "You have left the game.");
-					player.teleport(DeathSwap.defaultWorld);
-					FunctionManager.checkWinner();
-					return true;
-				}
-				if(DeathSwap.playerQueue.contains(player.getName())){ // Check if player in queue
-					DeathSwap.playerQueue.remove(player.getName());
-					FunctionManager.sendMessage(player, "You have been removed from the queue.");
-					return true;
-				}
-				// Normal action
-				FunctionManager.sendMessage(player, "You are not in the queue.");
-				return true;
+				GameHandler.leaveGame(player);
 			}
 			
 			if(args[0].equalsIgnoreCase("list")){ // List players
-				FunctionManager.sendMessage(player, "Player List : " + DeathSwap.playerQueue.size() + "/" + DeathSwap.maxPlayers);
-				if(DeathSwap.playerQueue.size() == 0){
-					player.sendMessage(ChatColor.GOLD + "There are no players in queue.");
-					return true;
-				}
-				for(String p : DeathSwap.playerQueue){
-					player.sendMessage(ChatColor.GOLD + p);
-				}
-				return true;
+				GameHandler.listPlayers(player);
 			}
 			return false;
 		}

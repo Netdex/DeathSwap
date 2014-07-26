@@ -20,7 +20,7 @@ public class FunctionManager {
 		player.sendMessage(ChatColor.GOLD + "/dsa start : Starts the game [OP]");
 		player.sendMessage(ChatColor.GOLD + "/dsa stop : Stops the game [OP]");
 		player.sendMessage(ChatColor.GOLD + "/dsa config setDefaultWorld : Sets the default world [OP]");
-		player.sendMessage(ChatColor.GOLD + "v3.5.2 Created by Netdex");
+		player.sendMessage(ChatColor.GOLD + "v" + DeathSwap.plugin.getDescription().getVersion() + " Created by Netdex");
 	}
 	
 	public static void sendMessage(Player player, String s){
@@ -95,5 +95,7 @@ public class FunctionManager {
 		Location finalloc = new Location(world, x, y, z);
 		return finalloc;
 	}
+	
+	
 	
 }

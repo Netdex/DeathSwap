@@ -22,10 +22,10 @@ public class DeathSwap extends JavaPlugin implements Listener {
 	public static Thread t;
 	public static PlayerSwapper ps = new PlayerSwapper();
 	public static Location defaultWorld;
-	public Plugin plugin;
+	public static Plugin plugin;
 	public static FileConfiguration config;
 	public static int maxPlayers;
-	
+	public static Menu menu;
 
 	public void onEnable() {
 		// Load and create configuration
@@ -40,7 +40,7 @@ public class DeathSwap extends JavaPlugin implements Listener {
 			e.printStackTrace();
 		}
 
-		this.plugin = this;
+		plugin = this;
 		getServer().getPluginManager().registerEvents(this, this); // Register listeners
 		FunctionManager.loadWorld(); // Load world
 		this.getCommand("ds").setExecutor(new CommandManager(this));
@@ -48,12 +48,14 @@ public class DeathSwap extends JavaPlugin implements Listener {
 
 		defaultWorld = FunctionManager.parseLocation(config.getString("defaultWorld"));
 		maxPlayers = DeathSwap.config.getInt("maxPlayers");
+		
+		menu = new Menu(this);
 	}
 
 	@SuppressWarnings("deprecation")
 	public void onDisable() {
-		getLogger().info("Removing all players...");
 		if(gameRunning){
+			getLogger().info("Removing all players...");
 			FunctionManager.playerBroadcast("Game ended prematurely.");
 			for(Player p : Bukkit.getServer().getOnlinePlayers()){
 				if(playerQueue.contains(p.getName())){
@@ -70,6 +72,11 @@ public class DeathSwap extends JavaPlugin implements Listener {
 			}
 			DeathSwap.playerQueue.clear();
 		}
+		plugin = null;
+		t = null;
+		ps = null;
+		world = null;
+		menu = null;
 	}
 
 	@SuppressWarnings("deprecation")
