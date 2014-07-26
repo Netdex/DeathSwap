@@ -65,31 +65,36 @@ public class PlayerSwapper extends Thread {
 	}
 	
 	public static void giveGift(Player player){
-		int giveChance = r.nextInt(5);
+		int giveChance = r.nextInt(4);
 		if(giveChance == 0){
 			PlayerInventory inv = player.getInventory();
-			int rand = r.nextInt(10);
-			if(rand >= 0 && rand < 5){
+			int rand = r.nextInt(13);
+			if(rand >= 0 && rand < 4){
 				FunctionManager.sendMessage(player, "You have been gifted some redstone!");
-				ItemStack redstone = new ItemStack(Material.REDSTONE, 3);
+				ItemStack redstone = new ItemStack(Material.REDSTONE, 6);
 				inv.addItem(redstone);
 			}
-			else if(rand >= 5 && rand < 7){
+			else if(rand >= 4 && rand < 8){
 				FunctionManager.sendMessage(player, "You have been gifted some obsidian!");
-				ItemStack obsidian = new ItemStack(Material.OBSIDIAN, 3);
+				ItemStack obsidian = new ItemStack(Material.OBSIDIAN, 5);
 				inv.addItem(obsidian);
 			}
-			else if(rand == 7){
+			else if(rand >=8 && rand < 10){
+				FunctionManager.sendMessage(player, "You have been gifted a nether wart!");
+				ItemStack netherwart = new ItemStack(Material.NETHER_WARTS, 1);
+				inv.addItem(netherwart);
+			}
+			else if(rand == 10){
 				FunctionManager.sendMessage(player, "You have been gifted some TNT!");
 				ItemStack tnt = new ItemStack(Material.TNT, 1);
 				inv.addItem(tnt);
 			}
-			else if(rand == 8){
+			else if(rand == 11){
 				FunctionManager.sendMessage(player, "You have been gifted a blaze rod!");
 				ItemStack blazerod = new ItemStack(Material.BLAZE_ROD, 1);
 				inv.addItem(blazerod);
 			}
-			else if(rand == 9){
+			else if(rand == 12){
 				FunctionManager.sendMessage(player, "You have been gifted a piston!");
 				ItemStack piston = new ItemStack(Material.PISTON_STICKY_BASE, 1);
 				inv.addItem(piston);
