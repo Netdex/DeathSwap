@@ -37,18 +37,17 @@ public class CommandManager implements CommandExecutor {
 				DeathSwap.menu.show(player);
 				return true;
 			}
-			
 			if(args[0].equalsIgnoreCase("join")){ // Join queue
 				GameHandler.joinGame(player);
 				return true;
 			}
-			
 			if(args[0].equalsIgnoreCase("leave")){ // Leave queue
 				GameHandler.leaveGame(player);
+				return true;
 			}
-			
 			if(args[0].equalsIgnoreCase("list")){ // List players
 				GameHandler.listPlayers(player);
+				return true;
 			}
 			return false;
 		}
@@ -80,6 +79,9 @@ public class CommandManager implements CommandExecutor {
 					}
 				}
 				Random r = new Random();
+				int invincibility = DeathSwap.config.getInt("invincibleTicks");
+				
+				FunctionManager.playerBroadcast("Spreading players...");
 				for(String ply : DeathSwap.playerQueue){ // Teleports all players into world
 					Player p = Bukkit.getServer().getPlayer(ply);
 					p.setGameMode(GameMode.SURVIVAL);
@@ -93,9 +95,7 @@ public class CommandManager implements CommandExecutor {
 					}
 					
 					p.teleport(new Location(Bukkit.getWorld("deathswap"), x, 128, z));
-					int invincibility = DeathSwap.config.getInt("invincibleTicks");
 					p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, invincibility, 7)); // Resistance
-					FunctionManager.sendMessage(p, "You have a " + (invincibility/20) + " second invulnerability period. Enjoy falling.");
 					
 					// Reset stats
 					p.setHealth(20);
@@ -103,7 +103,10 @@ public class CommandManager implements CommandExecutor {
 					p.setExp(0);
 					PlayerInventory inv = p.getInventory();
 					inv.clear();
+					p.updateInventory();
 				}
+				FunctionManager.playerBroadcast("DeathSwap has begun.");
+				FunctionManager.playerBroadcast("You have a " + (invincibility/20) + " second invulnerability period. Enjoy falling.");
 				DeathSwap.gameRunning = true; // Set game to running mode
 				DeathSwap.ps.revive();
 				DeathSwap.world.setTime(6000L); // Daytime
