@@ -60,7 +60,6 @@ public class PlayerSwapper extends Thread {
 				p.teleport(Bukkit.getServer().getPlayer(randomNames.get(i+1)).getLocation());
 			}
 			p.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 175 ,10));
-			giveGift(p);
 		}
 	}
 	

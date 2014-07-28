@@ -13,6 +13,7 @@ public class FunctionManager {
 	
 	public static void help(Player player) {
 		player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "=== Death Swap Help ===");
+		player.sendMessage(ChatColor.GOLD + "/ds : Opens the DeathSwap menu");
 		player.sendMessage(ChatColor.GOLD + "/ds join : Joins the DeathSwap queue");
 		player.sendMessage(ChatColor.GOLD + "/ds leave : Leaves the DeathSwap queue, or leaves during the game");
 		player.sendMessage(ChatColor.GOLD + "/ds list : Lists all players in the DeathSwap queue");

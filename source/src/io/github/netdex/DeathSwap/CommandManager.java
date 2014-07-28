@@ -5,6 +5,9 @@ import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.WorldCreator;
+import org.bukkit.WorldType;
 import org.bukkit.block.Biome;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -39,14 +42,17 @@ public class CommandManager implements CommandExecutor {
 			}
 			if(args[0].equalsIgnoreCase("join")){ // Join queue
 				GameHandler.joinGame(player);
+				FunctionManager.sendMessage(player,"Deprecated. Just type /ds next time.");
 				return true;
 			}
 			if(args[0].equalsIgnoreCase("leave")){ // Leave queue
 				GameHandler.leaveGame(player);
+				FunctionManager.sendMessage(player,"Deprecated. Just type /ds next time.");
 				return true;
 			}
 			if(args[0].equalsIgnoreCase("list")){ // List players
 				GameHandler.listPlayers(player);
+				FunctionManager.sendMessage(player,"Deprecated. Just type /ds next time.");
 				return true;
 			}
 			return false;
@@ -152,6 +158,13 @@ public class CommandManager implements CommandExecutor {
 					FunctionManager.help(player);
 					return true;
 				}
+			}
+			
+			if(args[0].equalsIgnoreCase("genworld")){
+				DeathSwap.world = new WorldCreator("deathswap").environment(World.Environment.NORMAL) // Parameters
+						.generateStructures(true).type(WorldType.NORMAL).createWorld();
+				FunctionManager.sendMessage(player, "New DeathSwap world generated.");
+				return true;
 			}
 			return false;
 		}
